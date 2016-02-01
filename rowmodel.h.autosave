@@ -1,0 +1,15 @@
+#ifndef ROWMODEL_H
+#define ROWMODEL_H
+
+
+class RowModel
+{
+public:
+    RowModel(int vaoID, int vertexCount);
+private:
+    int vaoID;
+    int vertexCount;
+    
+};
+
+#endif // ROWMODEL_H
