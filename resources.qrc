@@ -1,0 +1,14 @@
+<RCC>
+    <qresource prefix="/">
+        <file>res/t-54_wot/T-54.obj</file>
+        <file>res/t-54_wot/T-54.dds</file>
+        <file>res/Shaders/fragmentshader.frag</file>
+        <file>res/Shaders/vertexshader.vert</file>
+        <file>res/t-54_wot/T-54_crash.dds</file>
+        <file>res/t-54_wot/T-54_crash.obj</file>
+        <file>res/box/box.obj</file>
+        <file>res/box/box.dds</file>
+        <file>res/terrain/gravel.dds</file>
+        <file>res/Shaders/solidcolor.frag</file>
+    </qresource>
+</RCC>
