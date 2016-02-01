@@ -6,9 +6,9 @@
         <file>res/Shaders/vertexshader.vert</file>
         <file>res/t-54_wot/T-54_crash.dds</file>
         <file>res/t-54_wot/T-54_crash.obj</file>
-        <file>res/box/box.obj</file>
-        <file>res/box/box.dds</file>
         <file>res/terrain/gravel.dds</file>
         <file>res/Shaders/solidcolor.frag</file>
+        <file>res/box/box.obj</file>
+        <file>res/box/grass.dds</file>
     </qresource>
 </RCC>

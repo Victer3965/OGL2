@@ -61,7 +61,9 @@ QOpenGLShaderProgram* MainWindow::createShader(QString vshaderName, QString fsha
         QFile file(":/res/Shaders/"+vshaderName+".vert");
         if (file.open(QIODevice::ReadOnly)) {
             QString vsrc = file.readAll();
-            vshader->compileSourceCode(vsrc);
+            if (!vshader->compileSourceCode(vsrc)){
+                vshader->log();
+            }
         }
     }
 
@@ -70,21 +72,23 @@ QOpenGLShaderProgram* MainWindow::createShader(QString vshaderName, QString fsha
         QFile file(":/res/Shaders/"+fshaderName+".frag");
         if (file.open(QIODevice::ReadOnly)) {
             QString fsrc = file.readAll();
-            fshader->compileSourceCode(fsrc);
+            if (!fshader->compileSourceCode(fsrc)){
+                fshader->log();
+            }
         }
     }
 
-    QOpenGLShaderProgram *tempShader = new QOpenGLShaderProgram(this);
-    tempShader->addShader(vshader);
-    tempShader->addShader(fshader);
-    tempShader->bindAttributeLocation("vertex", PROGRAM_VERTEX_ATTRIBUTE);
-    tempShader->bindAttributeLocation("texCoord", PROGRAM_TEXCOORD_ATTRIBUTE);
-    tempShader->link();
+    QOpenGLShaderProgram *shader = new QOpenGLShaderProgram(this);
+    shader->addShader(vshader);
+    shader->addShader(fshader);
+    shader->bindAttributeLocation("vertex", PROGRAM_VERTEX_ATTRIBUTE);
+    shader->bindAttributeLocation("texCoord", PROGRAM_TEXCOORD_ATTRIBUTE);
+    shader->link();
 
-    tempShader->bind();
-    tempShader->setUniformValue("texture", 0);
+    shader->bind();
+    shader->setUniformValue("texture", 0);
 
-    return tempShader;
+    return shader;
 }
 
 void MainWindow::initializeGL()
@@ -95,7 +99,8 @@ void MainWindow::initializeGL()
     RawModel *modeltank = OBJLoader::Load("t-54_wot/T-54");
     models.append(new TexturedModel(modeltank, ":/res/t-54_wot/T-54.dds"));
     models.append(new TexturedModel(modeltank, ":/res/t-54_wot/T-54_crash.dds"));
-    models.append(new TexturedModel(Terrain::generateTerrain(), ":/res/terrain/gravel.dds"));
+    models.append(new TexturedModel(OBJLoader::Load("box/box"), ":/res/box/grass.dds"));
+//    models.append(new TexturedModel(Terrain::generateTerrain(), ":/res/terrain/gravel.dds"));
     models[0]->RotateModel(0, 0, 180);
     camRotX = -45;
     camRotY = 0;
@@ -107,7 +112,7 @@ void MainWindow::initializeGL()
 
 
     shader = createShader("vertexshader", "fragmentshader");
-    simpleShader = createShader("vertexshader", "solidshader");
+    simpleShader = createShader("vertexshader", "solidcolor");
 
 }
 
@@ -124,20 +129,19 @@ void MainWindow::paintGL()
 
     shader->bind();
     shader->setUniformValue("projMatrix", m_proj);
-
     shader->setUniformValue("ViewMatrix", ViewMatrix);
     shader->enableAttributeArray(PROGRAM_VERTEX_ATTRIBUTE);
     shader->enableAttributeArray(PROGRAM_TEXCOORD_ATTRIBUTE);
     shader->setAttributeBuffer(PROGRAM_VERTEX_ATTRIBUTE, GL_FLOAT, 0, 3, 8 * sizeof(GLfloat));
     shader->setAttributeBuffer(PROGRAM_TEXCOORD_ATTRIBUTE, GL_FLOAT, 3 * sizeof(GLfloat), 2, 8 * sizeof(GLfloat));
     for (int i=0; i < models.size()-1; i++){
-        models[i]->PaintModel(shader);
+//        models[i]->PaintModel(shader);
     }
-//    models.last()->PaintModel(shader);
+    models.last()->PaintModel(shader);
     shader->release();
+
     simpleShader->bind();
     simpleShader->setUniformValue("projMatrix", m_proj);
-
     simpleShader->setUniformValue("ViewMatrix", ViewMatrix);
 
     QMatrix4x4 identityMatrix;

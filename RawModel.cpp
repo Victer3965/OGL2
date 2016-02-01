@@ -21,12 +21,10 @@ RawModel::RawModel(QVector<QVector3D> Verteces, QVector<QVector2D> Textures, QVe
     vbo.create();
     vbo.bind();
     vbo.allocate(vertData.constData(), vertData.count() * sizeof(GLfloat));
-
 }
 
 void RawModel::PaintModel()
 {
     vbo.bind();
     glDrawArrays(GL_TRIANGLES, 0, vertexCount);
-
 }

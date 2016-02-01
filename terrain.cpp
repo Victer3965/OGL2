@@ -35,25 +35,25 @@ RawModel* Terrain::generateTerrain()
             int topRight = topLeft + 1;
             int bottomLeft = ((gz+1)*VERTEX_COUNT)+gx;
             int bottomRight = bottomLeft + 1;
+            faceVertices.append(vertices[bottomLeft]);
             faceVertices.append(vertices[topLeft]);
-            faceVertices.append(vertices[bottomLeft]);
-            faceVertices.append(vertices[topRight]);
             faceVertices.append(vertices[topRight]);
             faceVertices.append(vertices[bottomLeft]);
+            faceVertices.append(vertices[topRight]);
             faceVertices.append(vertices[bottomRight]);
 
+            faceNormals.append(normals[bottomLeft]);
             faceNormals.append(normals[topLeft]);
-            faceNormals.append(normals[bottomLeft]);
-            faceNormals.append(normals[topRight]);
             faceNormals.append(normals[topRight]);
             faceNormals.append(normals[bottomLeft]);
+            faceNormals.append(normals[topRight]);
             faceNormals.append(normals[bottomRight]);
 
+            faceTextures.append(textureCoords[bottomLeft]);
             faceTextures.append(textureCoords[topLeft]);
-            faceTextures.append(textureCoords[bottomLeft]);
-            faceTextures.append(textureCoords[topRight]);
             faceTextures.append(textureCoords[topRight]);
             faceTextures.append(textureCoords[bottomLeft]);
+            faceTextures.append(textureCoords[topRight]);
             faceTextures.append(textureCoords[bottomRight]);
 
         }
