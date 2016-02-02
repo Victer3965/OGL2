@@ -1,9 +1,11 @@
-#include "mainwindow.h"
-#include "terrain.h"
 #include <QFile>
 #include <QTimer>
 #include <QCursor>
 #include <math.h>
+
+#include "mainwindow.h"
+#include "terrain.h"
+#include "shader.h"
 
 #define KEY_FORWARD 0
 #define KEY_BACKWARD 1
@@ -28,9 +30,7 @@ MainWindow::MainWindow(QWidget *parent)
     distanceFromPlayer = 20;
     keyStates = new bool [14];
     memset(keyStates, 0, sizeof(bool)*14);
-    timer = new QTimer(this);
-    connect(timer, &QTimer::timeout, this, &MainWindow::updateScene);
-    timer->start(20);
+    startTimer();
 }
 
 
@@ -51,45 +51,7 @@ void MainWindow::resizeGL(int w, int h)
     m_proj.perspective(90.0f, GLfloat(w) / h, 0.01f, 100.0f);
 }
 
-QOpenGLShaderProgram* MainWindow::createShader(QString vshaderName, QString fshaderName)
-{
-#define PROGRAM_VERTEX_ATTRIBUTE 0
-#define PROGRAM_TEXCOORD_ATTRIBUTE 1
 
-    QOpenGLShader *vshader = new QOpenGLShader(QOpenGLShader::Vertex, this);
-    {
-        QFile file(":/res/Shaders/"+vshaderName+".vert");
-        if (file.open(QIODevice::ReadOnly)) {
-            QString vsrc = file.readAll();
-            if (!vshader->compileSourceCode(vsrc)){
-                vshader->log();
-            }
-        }
-    }
-
-    QOpenGLShader *fshader = new QOpenGLShader(QOpenGLShader::Fragment, this);
-    {
-        QFile file(":/res/Shaders/"+fshaderName+".frag");
-        if (file.open(QIODevice::ReadOnly)) {
-            QString fsrc = file.readAll();
-            if (!fshader->compileSourceCode(fsrc)){
-                fshader->log();
-            }
-        }
-    }
-
-    QOpenGLShaderProgram *shader = new QOpenGLShaderProgram(this);
-    shader->addShader(vshader);
-    shader->addShader(fshader);
-    shader->bindAttributeLocation("vertex", PROGRAM_VERTEX_ATTRIBUTE);
-    shader->bindAttributeLocation("texCoord", PROGRAM_TEXCOORD_ATTRIBUTE);
-    shader->link();
-
-    shader->bind();
-    shader->setUniformValue("texture", 0);
-
-    return shader;
-}
 
 void MainWindow::initializeGL()
 {
@@ -100,7 +62,7 @@ void MainWindow::initializeGL()
     models.append(new TexturedModel(modeltank, ":/res/t-54_wot/T-54.dds"));
     models.append(new TexturedModel(modeltank, ":/res/t-54_wot/T-54_crash.dds"));
     models.append(new TexturedModel(OBJLoader::Load("box/box"), ":/res/box/grass.dds"));
-//    models.append(new TexturedModel(Terrain::generateTerrain(), ":/res/terrain/gravel.dds"));
+    models.append(new TexturedModel(Terrain::generateTerrain(), ":/res/terrain/gravel.dds"));
     models[0]->RotateModel(0, 0, 180);
     camRotX = -45;
     camRotY = 0;
@@ -111,8 +73,8 @@ void MainWindow::initializeGL()
 
 
 
-    shader = createShader("vertexshader", "fragmentshader");
-    simpleShader = createShader("vertexshader", "solidcolor");
+    shader = Shader::createShader("vertexshader", "fragmentshader", this);
+    simpleShader = Shader::createShader("vertexshader", "solidcolor", this);
 
 }
 
@@ -130,12 +92,9 @@ void MainWindow::paintGL()
     shader->bind();
     shader->setUniformValue("projMatrix", m_proj);
     shader->setUniformValue("ViewMatrix", ViewMatrix);
-    shader->enableAttributeArray(PROGRAM_VERTEX_ATTRIBUTE);
-    shader->enableAttributeArray(PROGRAM_TEXCOORD_ATTRIBUTE);
-    shader->setAttributeBuffer(PROGRAM_VERTEX_ATTRIBUTE, GL_FLOAT, 0, 3, 8 * sizeof(GLfloat));
-    shader->setAttributeBuffer(PROGRAM_TEXCOORD_ATTRIBUTE, GL_FLOAT, 3 * sizeof(GLfloat), 2, 8 * sizeof(GLfloat));
+
     for (int i=0; i < models.size()-1; i++){
-//        models[i]->PaintModel(shader);
+        models[i]->PaintModel(shader);
     }
     models.last()->PaintModel(shader);
     shader->release();
@@ -306,4 +265,11 @@ void MainWindow::calculateCamPos(float distance)
     camPosX = models[0]->GetPos().x() + horizDistnce*sin(camRotZ/180*M_PI);
     camPosY = models[0]->GetPos().y() + horizDistnce*cos(camRotZ/180*M_PI);
     camPosZ = models[0]->GetPos().z() + vertDistance;
+}
+
+void MainWindow::startTimer()
+{
+    timer = new QTimer(this);
+    connect (timer, &QTimer::timeout, this, &MainWindow::updateScene);
+    timer->start(20);
 }

@@ -1,6 +1,0 @@
-#include "rawmodel.h"
-
-RowModel::RowModel(int vaoID, int vertexCount)
-{
-    
-}

@@ -23,8 +23,9 @@ void TexturedModel::PaintModel(QOpenGLShaderProgram *shader)
     transformationMatrix.rotate(zRot , 0.0f, 0.0f, 1.0f);
     shader->setUniformValue("modelMatrix",transformationMatrix);
     textures->bind();
-    model->PaintModel();
+    model->PaintModel(shader);
     textures->release();
+
 }
 
 void TexturedModel::RotateModel(int xAngle, int yAngle, int zAngle)

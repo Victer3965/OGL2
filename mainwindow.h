@@ -45,6 +45,8 @@ private:
     QOpenGLShaderProgram* createShader(QString vshaderName, QString fshaderName);
 
     void calculateCamPos(float distance);
+
+    void startTimer();
 };
 
 #endif // MAINWINDOW_H

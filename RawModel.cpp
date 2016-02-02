@@ -1,4 +1,5 @@
 #include "RawModel.h"
+#include "shader.h"
 
 RawModel::RawModel(QVector<QVector3D> Verteces, QVector<QVector2D> Textures, QVector<QVector3D> Normals)
 {
@@ -21,10 +22,16 @@ RawModel::RawModel(QVector<QVector3D> Verteces, QVector<QVector2D> Textures, QVe
     vbo.create();
     vbo.bind();
     vbo.allocate(vertData.constData(), vertData.count() * sizeof(GLfloat));
+
 }
 
-void RawModel::PaintModel()
+void RawModel::PaintModel(QOpenGLShaderProgram *shader)
 {
     vbo.bind();
+    shader->enableAttributeArray(PROGRAM_VERTEX_ATTRIBUTE);
+    shader->enableAttributeArray(PROGRAM_TEXCOORD_ATTRIBUTE);
+    shader->setAttributeBuffer(PROGRAM_VERTEX_ATTRIBUTE, GL_FLOAT, 0, 3, 8 * sizeof(GLfloat));
+    shader->setAttributeBuffer(PROGRAM_TEXCOORD_ATTRIBUTE, GL_FLOAT, 3 * sizeof(GLfloat), 2, 8 * sizeof(GLfloat));
     glDrawArrays(GL_TRIANGLES, 0, vertexCount);
+    vbo.release();
 }

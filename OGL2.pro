@@ -17,13 +17,17 @@ SOURCES += main.cpp\
     objloader.cpp \
     terrain.cpp \
     TexturedModel.cpp \
-    RawModel.cpp
+    RawModel.cpp \
+    shader.cpp \
+    phisicstanks.cpp
 
 HEADERS  += mainwindow.h \
     objloader.h \
     terrain.h \
     TexturedModel.h \
-    RawModel.h
+    RawModel.h \
+    shader.h \
+    PhisicsTanks.h
 
 RESOURCES += \
     resources.qrc
