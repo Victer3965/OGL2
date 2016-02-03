@@ -4,7 +4,6 @@
 #include <math.h>
 
 #include "mainwindow.h"
-#include "terrain.h"
 #include "shader.h"
 
 #define KEY_FORWARD 0
@@ -31,6 +30,7 @@ MainWindow::MainWindow(QWidget *parent)
     keyStates = new bool [14];
     memset(keyStates, 0, sizeof(bool)*14);
     startTimer();
+    radiusNearby=100.0;
 }
 
 
@@ -48,7 +48,7 @@ void MainWindow::resizeGL(int w, int h)
     glOrtho(-500.0, 500.0, 500.0, 500.0, -500.0, 500.0);
     glViewport( 0, 0, w, h);
     m_proj.setToIdentity();
-    m_proj.perspective(90.0f, GLfloat(w) / h, 0.01f, 100.0f);
+    m_proj.perspective(90.0f, GLfloat(w) / h, 0.01f, radiusNearby);
 }
 
 
@@ -62,7 +62,7 @@ void MainWindow::initializeGL()
     models.append(new TexturedModel(modeltank, ":/res/t-54_wot/T-54.dds"));
     models.append(new TexturedModel(modeltank, ":/res/t-54_wot/T-54_crash.dds"));
     models.append(new TexturedModel(OBJLoader::Load("box/box"), ":/res/box/grass.dds"));
-    models.append(new TexturedModel(Terrain::generateTerrain(), ":/res/terrain/gravel.dds"));
+
     models[0]->RotateModel(0, 0, 180);
     camRotX = -45;
     camRotY = 0;
@@ -70,8 +70,6 @@ void MainWindow::initializeGL()
     calculateCamPos(distanceFromPlayer);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
-
-
 
     shader = Shader::createShader("vertexshader", "fragmentshader", this);
     simpleShader = Shader::createShader("vertexshader", "solidcolor", this);
@@ -93,10 +91,20 @@ void MainWindow::paintGL()
     shader->setUniformValue("projMatrix", m_proj);
     shader->setUniformValue("ViewMatrix", ViewMatrix);
 
+    chanksNerby = ChunkManager.getChunksNearby(models[0]->GetPos().x(),
+                                               models[0]->GetPos().y(),
+                                               radiusNearby);
+
+    for (int i=0; i < chanksNerby.size(); i++)
+    {
+        chanksNerby[i]->PaintModel(shader);
+    }
+
     for (int i=0; i < models.size()-1; i++){
         models[i]->PaintModel(shader);
     }
-    models.last()->PaintModel(shader);
+
+//    models.last()->PaintModel(shader);
     shader->release();
 
     simpleShader->bind();

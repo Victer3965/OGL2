@@ -19,7 +19,9 @@ SOURCES += main.cpp\
     TexturedModel.cpp \
     RawModel.cpp \
     shader.cpp \
-    phisicstanks.cpp
+    phisicstanks.cpp \
+    ChunkManager.cpp \
+    TexturesManager.cpp
 
 HEADERS  += mainwindow.h \
     objloader.h \
@@ -27,7 +29,9 @@ HEADERS  += mainwindow.h \
     TexturedModel.h \
     RawModel.h \
     shader.h \
-    PhisicsTanks.h
+    PhisicsTanks.h \
+    ChunkManager.h \
+    TexturesManager.h
 
 RESOURCES += \
     resources.qrc

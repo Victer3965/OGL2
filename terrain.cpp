@@ -1,6 +1,5 @@
 #include "terrain.h"
-#define VERTEX_COUNT 2
-#define SIZE 100
+
 Terrain::Terrain()
 {
 
@@ -8,19 +7,19 @@ Terrain::Terrain()
 
 RawModel* Terrain::generateTerrain()
 {
-    int count = VERTEX_COUNT * VERTEX_COUNT;
+    int count = vertexCount * vertexCount;
     QVector<QVector3D> vertices(count);
     QVector<QVector3D> normals(count);
     QVector<QVector2D> textureCoords(count);
     int vertexPointer = 0;
-    for(int i=0;i<VERTEX_COUNT;i++){
-        for(int j=0;j<VERTEX_COUNT;j++){
-            vertices[vertexPointer] = QVector3D((float)j/((float)VERTEX_COUNT - 1) * SIZE,
-                                                (float)i/((float)VERTEX_COUNT - 1) * SIZE,
-                                                0);
+    for(int i=0;i<vertexCount;i++){
+        for(int j=0;j<vertexCount;j++){
+            vertices[vertexPointer] = QVector3D((float)j/((float)vertexCount - 1) * sizeX,
+                                                (float)i/((float)vertexCount - 1) * sizeY,
+                                                0/*rand()/(float)RAND_MAX*/);
             normals[vertexPointer] = QVector3D(0, 0, 1);
-            textureCoords[vertexPointer] = QVector2D((float)j/((float)VERTEX_COUNT - 1),
-                                                       (float)i/((float)VERTEX_COUNT - 1));
+            textureCoords[vertexPointer] = QVector2D((float)j/((float)vertexCount - 1),
+                                                       (float)i/((float)vertexCount - 1));
             vertexPointer++;
         }
     }
@@ -29,11 +28,11 @@ RawModel* Terrain::generateTerrain()
     QVector<QVector3D> faceNormals;
     QVector<QVector2D> faceTextures;
 
-    for(int gz=0;gz<VERTEX_COUNT-1;gz++){
-        for(int gx=0;gx<VERTEX_COUNT-1;gx++){
-            int topLeft = (gz*VERTEX_COUNT)+gx;
+    for(int gz=0;gz<vertexCount-1;gz++){
+        for(int gx=0;gx<vertexCount-1;gx++){
+            int topLeft = (gz*vertexCount)+gx;
             int topRight = topLeft + 1;
-            int bottomLeft = ((gz+1)*VERTEX_COUNT)+gx;
+            int bottomLeft = ((gz+1)*vertexCount)+gx;
             int bottomRight = bottomLeft + 1;
             faceVertices.append(vertices[bottomLeft]);
             faceVertices.append(vertices[topLeft]);

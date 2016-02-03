@@ -1,12 +1,12 @@
 #include "TexturedModel.h"
 #include "math.h"
-
+#include "TexturesManager.h"
 
 
 
 TexturedModel::TexturedModel(RawModel *model, QString nameTexture)
 {
-    textures = new QOpenGLTexture(QImage(nameTexture).mirrored());
+    textures = TexturesManager::getTexture(nameTexture);
     pos.setX(0);
     pos.setY(0);
     pos.setZ(0);

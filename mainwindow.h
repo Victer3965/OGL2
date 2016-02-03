@@ -10,6 +10,7 @@
 
 #include "TexturedModel.h"
 #include "objloader.h"
+#include "ChunkManager.h"
 
 
 class MainWindow : public QOpenGLWidget, protected QOpenGLFunctions
@@ -31,14 +32,25 @@ public:
     void keyReleaseEvent(QKeyEvent *event);
 
 private:
-    QOpenGLShaderProgram *shader, *simpleShader;
-    QMatrix4x4 m_proj;
     float camRotX, camRotY, camRotZ;
+
     float camPosX, camPosY, camPosZ;
-    bool *keyStates;
-    QTimer *timer;
+
     float distanceFromPlayer;
-    QList<TexturedModel*> models;
+
+    float radiusNearby;
+
+    bool *keyStates;
+
+    QTimer *timer;
+
+    QMatrix4x4 m_proj;
+
+    ChunkManager ChunkManager;
+
+    QList<TexturedModel*> models, chanksNerby;
+
+    QOpenGLShaderProgram *shader, *simpleShader;
 
     void updateScene();
 
