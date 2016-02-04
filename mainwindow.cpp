@@ -3,7 +3,7 @@
 #include <QCursor>
 #include <math.h>
 
-#include "mainwindow.h"
+#include "MainWindow.h"
 #include "shader.h"
 
 #define KEY_FORWARD 0

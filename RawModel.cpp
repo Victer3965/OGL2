@@ -1,5 +1,5 @@
 #include "RawModel.h"
-#include "shader.h"
+#include "Shader.h"
 
 RawModel::RawModel(QVector<QVector3D> Verteces, QVector<QVector2D> Textures, QVector<QVector3D> Normals)
 {

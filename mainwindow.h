@@ -9,7 +9,7 @@
 #include <QOpenGLShaderProgram>
 
 #include "TexturedModel.h"
-#include "objloader.h"
+#include "OBJLoader.h"
 #include "ChunkManager.h"
 #include "PhisicsTanks.h"
 

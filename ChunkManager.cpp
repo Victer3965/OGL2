@@ -1,7 +1,7 @@
 #include <math.h>
 
 #include "ChunkManager.h" 
-#include "terrain.h"
+#include "Terrain.h"
 
 ChunkManager::ChunkManager()
 {

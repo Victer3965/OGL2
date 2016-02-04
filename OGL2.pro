@@ -13,25 +13,26 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp \
-    objloader.cpp \
-    terrain.cpp \
     TexturedModel.cpp \
     RawModel.cpp \
-    shader.cpp \
-    phisicstanks.cpp \
     ChunkManager.cpp \
-    TexturesManager.cpp
+    TexturesManager.cpp \
+    PhisicsTanks.cpp \
+    OBJLoader.cpp \
+    Terrain.cpp \
+    Shader.cpp \
+    MainWindow.cpp
 
-HEADERS  += mainwindow.h \
-    objloader.h \
-    terrain.h \
+HEADERS  += \
     TexturedModel.h \
     RawModel.h \
-    shader.h \
     PhisicsTanks.h \
     ChunkManager.h \
-    TexturesManager.h
+    TexturesManager.h \
+    OBJLoader.h \
+    Terrain.h \
+    Shader.h \
+    MainWindow.h
 
 RESOURCES += \
     resources.qrc
