@@ -11,6 +11,7 @@
 #include "TexturedModel.h"
 #include "objloader.h"
 #include "ChunkManager.h"
+#include "PhisicsTanks.h"
 
 
 class MainWindow : public QOpenGLWidget, protected QOpenGLFunctions
@@ -47,6 +48,8 @@ private:
     QMatrix4x4 m_proj;
 
     ChunkManager ChunkManager;
+
+    PhisicsTanks* player;
 
     QList<TexturedModel*> models, chanksNerby;
 

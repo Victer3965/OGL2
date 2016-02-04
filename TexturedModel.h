@@ -17,9 +17,10 @@ public:
     TexturedModel(RawModel* model, QString nameTexture);
     void PaintModel(QOpenGLShaderProgram *shader);
     void RotateModel(int xAngle, int yAngle, int zAngle);
-    void MoveModel (float dx, float dy);
+    void MoveModel (float dx, float dy, float dz = 0);
     QVector3D GetPos();
     void MoveForward(float distance);
+    QVector3D GetRot();
 private:
     float xRot;
     float yRot;

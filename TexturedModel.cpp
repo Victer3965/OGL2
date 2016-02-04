@@ -35,10 +35,16 @@ void TexturedModel::RotateModel(int xAngle, int yAngle, int zAngle)
     zRot += zAngle;
 }
 
-void TexturedModel::MoveModel(float dx, float dy)
+void TexturedModel::MoveModel(float dx, float dy, float dz)
 {    
     pos.setX(pos.x()+dx);
     pos.setY(pos.y()+dy);
+    pos.setZ(pos.z()+dz);
+}
+
+QVector3D TexturedModel::GetRot()
+{
+    return QVector3D(xRot, yRot, zRot);
 }
 
 QVector3D TexturedModel::GetPos()

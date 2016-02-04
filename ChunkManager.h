@@ -5,6 +5,12 @@
 
 #define SIZE_MAP 64
 
+struct Coords
+{
+    int x;
+    int y;
+};
+
 class ChunkManager
 {
 public:
@@ -13,8 +19,20 @@ public:
     TexturedModel *getChunk(int x, int y);
 
     QList<TexturedModel*> getChunksNearby(float x, float y, float radius);
+
 private:
     TexturedModel *chunks[SIZE_MAP][SIZE_MAP];
+
+    QList<Coords> coords;
+
+    int chunksCreated;
+
+    bool allowChunksCreation;
+
+    void createChunk(int x, int y);
+
+    void addCoords(int x, int y);
+
 };
 
 #endif // CHUNKMANAGER_H

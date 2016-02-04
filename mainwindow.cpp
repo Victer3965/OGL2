@@ -59,11 +59,16 @@ void MainWindow::initializeGL()
     glClearColor(0.1, 0.1, 0.1, 1.0);
 
     RawModel *modeltank = OBJLoader::Load("t-54_wot/T-54");
-    models.append(new TexturedModel(modeltank, ":/res/t-54_wot/T-54.dds"));
+
+    TexturedModel* tank = new TexturedModel(modeltank, ":/res/t-54_wot/T-54.dds");
+
+    player = new PhisicsTanks(tank);
+    models.append(tank);
     models.append(new TexturedModel(modeltank, ":/res/t-54_wot/T-54_crash.dds"));
     models.append(new TexturedModel(OBJLoader::Load("box/box"), ":/res/box/grass.dds"));
 
-    models[0]->RotateModel(0, 0, 180);
+    tank->RotateModel(0, 0, 180);
+    tank->MoveModel(0, 0, 0.55);
     camRotX = -45;
     camRotY = 0;
     camRotZ = 0;
@@ -192,25 +197,27 @@ void MainWindow::updateScene()
 
     if (keyStates[KEY_FORWARD])
     {
-        models[0]->MoveForward(1);
-        calculateCamPos(distanceFromPlayer);
+        player->setAcceleration(0.1);
     }
     if (keyStates[KEY_BACKWARD])
     {
-        models[0]->MoveForward(-1);
-        calculateCamPos(distanceFromPlayer);
+        player->setAcceleration(-0.1);
     }
+
+    if (!keyStates[KEY_FORWARD] && !keyStates[KEY_BACKWARD])
+    {
+        player->setAcceleration(0);
+    }
+
     if (keyStates[KEY_LEFT])
     {
         models[0]->RotateModel(0, 0, 1);
         camRotZ-=1;
-        calculateCamPos(distanceFromPlayer);
     }
     if (keyStates[KEY_RIGHT])
     {
         models[0]->RotateModel(0, 0, -1);
         camRotZ+=1;
-        calculateCamPos(distanceFromPlayer);
     }
     if (keyStates[KEY_CAM_FORWARD])
     {
@@ -243,25 +250,23 @@ void MainWindow::updateScene()
     if (keyStates[KEY_CAM_TURN_UP] && camRotX<90)
     {
         camRotX+=1;
-        calculateCamPos(distanceFromPlayer);
     }
     if (keyStates[KEY_CAM_TURN_DOWN] && camRotX>-90)
     {
         camRotX-=1;
-        calculateCamPos(distanceFromPlayer);
     }
-    if (keyStates[KEY_CAM_CLOSER] && camRotX>-90)
+    if (keyStates[KEY_CAM_CLOSER] /*&& camRotX>-90*/)
     {
         distanceFromPlayer-=0.5;
-        camRotX+=1;
-        calculateCamPos(distanceFromPlayer);
+//        camRotX+=1;
     }
-    if (keyStates[KEY_CAM_FARTHER] && camRotX>-90)
+    if (keyStates[KEY_CAM_FARTHER] /*&& camRotX>-90*/)
     {
         distanceFromPlayer+=0.5;
-        camRotX-=1;
-        calculateCamPos(distanceFromPlayer);
+//        camRotX-=1;
     }
+    player->move();
+    calculateCamPos(distanceFromPlayer);
     update();
 }
 

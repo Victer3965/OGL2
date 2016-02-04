@@ -4,7 +4,6 @@
 #include <QHash>
 #include <QOpenGLTexture>
 
-
 class TexturesManager
 {
 public:
