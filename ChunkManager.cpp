@@ -6,8 +6,6 @@
 ChunkManager::ChunkManager()
 {
     memset(chunks, 0, sizeof(chunks));
-//    ChunksThread = new CreateChunksThread(this);
-//    ChunksThread->start();
 }
 
 TexturedModel *ChunkManager::getChunk(int x, int y)
@@ -32,29 +30,93 @@ TexturedModel *ChunkManager::getChunk(int x, int y)
     return 0;
 }
 
-QList<TexturedModel*> ChunkManager::getChunksNearby(float x, float y, float radius)
+QList<TexturedModel*> ChunkManager::getChunksNearby(float modelx, float modely, float radius)
 {
     allowChunksCreation = true;
     chunksCreated = 0;
     QList<TexturedModel*> result;
-    for (float i = -radius; i<=radius; i+=Terrain::sizeX)
+
+    int x0 = modelx/Terrain::size;
+    int y0 = modely/Terrain::size;
+    int r = radius/Terrain::size;
+
+    int x = 0;
+    int y = r;
+    int d = 3-2*y;;
+
+    while(x <= y)
     {
-        float a = acosf(i/radius);
-        float t = radius * sinf(a);
-        for (float j = t; j>=-t; j-=Terrain::sizeY )
+        TexturedModel* chunk;
+
+        if (x == 0)
         {
-            float posChunkX = (x+i)/Terrain::sizeX;
-            float posChunkY = (y+j)/Terrain::sizeY;
-            TexturedModel* chunk = getChunk(posChunkX, posChunkY);
-            if (chunk)
-            {
-                result.append(chunk);
-            }
-            if (chunksCreated > 5)
-            {
-                allowChunksCreation = false;
-            }
+            chunk = getChunk(x0, y0);
+            if (chunk) result.append(chunk);
         }
+        else
+        {
+            chunk = getChunk(x + x0, x + y0);
+            if (chunk) result.append(chunk);
+
+            chunk = getChunk(x + x0, -x + y0);
+            if (chunk) result.append(chunk);
+
+            chunk = getChunk(-x + x0, x + y0);
+            if (chunk) result.append(chunk);
+
+            chunk = getChunk(-x + x0, -x + y0);
+            if (chunk) result.append(chunk);
+        }
+
+        for (int i = x+1; i <= y ; i++)
+        {
+            chunk = getChunk(x + x0, i + y0);
+            if (chunk) result.append(chunk);
+
+            chunk = getChunk(x + x0, -i + y0);
+            if (chunk) result.append(chunk);
+
+            if (x>0)
+            {
+                chunk = getChunk(-x + x0, -i + y0);
+                if (chunk) result.append(chunk);
+
+                chunk = getChunk(-x + x0, i + y0);
+                if (chunk) result.append(chunk);
+            }
+
+            chunk = getChunk(i + x0, x + y0);
+            if (chunk) result.append(chunk);
+
+            chunk = getChunk(-i + x0, x + y0);
+            if (chunk) result.append(chunk);
+
+            if (x>0)
+            {
+                chunk = getChunk(i + x0, -x + y0);
+                if (chunk) result.append(chunk);
+
+                chunk = getChunk(-i + x0, -x + y0);
+                if (chunk) result.append(chunk);
+            }
+
+        }
+
+
+        if (chunksCreated > 5)
+            allowChunksCreation = false;
+
+        if (d < 0)
+        {
+            d = d + 4*x + 6;
+        }
+        else
+        {
+            d = d + 4 * (x - y) + 10;
+            --y;
+        }
+        ++x;
+
     }
 
     return result;
@@ -63,14 +125,14 @@ QList<TexturedModel*> ChunkManager::getChunksNearby(float x, float y, float radi
 void ChunkManager::createChunk(int x, int y)
 {
     chunks[x][y] = new TexturedModel(Terrain::generateTerrain(), ":/res/terrain/gravel.dds");
-    chunks[x][y]->MoveModel(x*Terrain::sizeX, y*Terrain::sizeY);
+    chunks[x][y]->MoveModel(x*Terrain::size, y*Terrain::size);
 }
 
-void ChunkManager::addCoords(int x, int y)
-{
-    Coords tempCoords;
-    tempCoords.x = x;
-    tempCoords.y = y;
-    coords.append(tempCoords);
-}
+//void ChunkManager::addCoords(int x, int y)
+//{
+//    Coords tempCoords;
+//    tempCoords.x = x;
+//    tempCoords.y = y;
+//    coords.append(tempCoords);
+//}
 

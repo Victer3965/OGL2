@@ -10,8 +10,7 @@ class Terrain
 public:
     Terrain();
     static RawModel *generateTerrain();
-    static const float sizeX = 8;
-    static const float sizeY = 8;
+    static const float size = 8;
     static const float vertexCount = 2;
 };
 

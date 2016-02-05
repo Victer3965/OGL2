@@ -14,8 +14,8 @@ RawModel* Terrain::generateTerrain()
     int vertexPointer = 0;
     for(int i=0;i<vertexCount;i++){
         for(int j=0;j<vertexCount;j++){
-            vertices[vertexPointer] = QVector3D((float)j/((float)vertexCount - 1) * sizeX,
-                                                (float)i/((float)vertexCount - 1) * sizeY,
+            vertices[vertexPointer] = QVector3D((float)j/((float)vertexCount - 1) * size,
+                                                (float)i/((float)vertexCount - 1) * size,
                                                 0/*rand()/(float)RAND_MAX*/);
             normals[vertexPointer] = QVector3D(0, 0, 1);
             textureCoords[vertexPointer] = QVector2D((float)j/((float)vertexCount - 1),

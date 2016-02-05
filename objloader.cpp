@@ -8,9 +8,9 @@ OBJLoader::OBJLoader()
 }
 RawModel *OBJLoader::Load(QString path)
 {
-    QVector<QVector3D> temp_vertices, out_vertices;
-    QVector<QVector2D> temp_textures, out_textures;
-    QVector<QVector3D> temp_normals, out_normals;
+    QVector<QVector3D> tempVertices, outVertices;
+    QVector<QVector2D> tempTextures, outTextures;
+    QVector<QVector3D> tempNormals, outNormals;
 
     QVector<int> vertexIndices;
     QVector<int> texIndices;
@@ -23,18 +23,26 @@ RawModel *OBJLoader::Load(QString path)
     }
 
     QTextStream in(&file);
-    while(!in.atEnd()) {
+    while(!in.atEnd())
+    {
         QString line = in.readLine();
         QStringList fields = line.split(" ", QString::SkipEmptyParts);
-        if ( line.startsWith("v ") ){
-            temp_vertices.append(QVector3D( fields[1].toFloat(), fields[2].toFloat(), fields[3].toFloat()) );
+        if (line.startsWith("v "))
+        {
+            tempVertices.append(QVector3D(fields[1].toFloat(), fields[2].toFloat(), fields[3].toFloat()));
         }
-        else if ( line.startsWith("vt") ){
-            temp_textures.append(QVector2D( fields[1].toFloat(), fields[2].toFloat()) );
-        }else if ( line.startsWith("vn") ){
-            temp_normals.append(QVector3D( fields[1].toFloat(), fields[2].toFloat(), fields[3].toFloat()) );
-        }else if ( line.startsWith("f ") ){
-            for ( int i=0; i<3; i++){
+        else if (line.startsWith("vt"))
+        {
+            tempTextures.append(QVector2D(fields[1].toFloat(), fields[2].toFloat()));
+        }
+        else if (line.startsWith("vn"))
+        {
+            tempNormals.append(QVector3D(fields[1].toFloat(), fields[2].toFloat(), fields[3].toFloat()));
+        }
+        else if (line.startsWith("f "))
+        {
+            for (int i=0; i<3; i++)
+            {
                 QStringList indeces = fields[i+1].split("/");
                 vertexIndices.append(indeces[0].toInt());
                 texIndices   .append(indeces[1].toInt());
@@ -42,17 +50,20 @@ RawModel *OBJLoader::Load(QString path)
             }
         }
     }
-    for( int i=0; i<vertexIndices.size(); i++ ){
+    for(int i=0; i<vertexIndices.size(); i++)
+    {
         unsigned int vertexIndex = vertexIndices[i];
-        out_vertices.append( temp_vertices[ vertexIndex-1 ] );
+        outVertices.append(tempVertices[vertexIndex-1]);
     }
-    for( int i=0; i<texIndices.size(); i++ ){
+    for(int i=0; i<texIndices.size(); i++)
+    {
         unsigned int texIndex = texIndices[i];
-        out_textures.append( temp_textures[ texIndex-1 ] );
+        outTextures.append(tempTextures[texIndex-1]);
     }
-    for( int i=0; i<normalIndices.size(); i++ ){
+    for(int i=0; i<normalIndices.size(); i++)
+    {
         unsigned int normalIndex = normalIndices[i];
-        out_normals.append( temp_normals[ normalIndex-1 ] );
+        outNormals.append(tempNormals[normalIndex-1]);
     }
-    return new RawModel(out_vertices, out_textures, out_normals);
+    return new RawModel(outVertices, outTextures, outNormals);
 }

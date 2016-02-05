@@ -18,7 +18,7 @@ public:
 
     TexturedModel *getChunk(int x, int y);
 
-    QList<TexturedModel*> getChunksNearby(float x, float y, float radius);
+    QList<TexturedModel*> getChunksNearby(float modelx, float modely, float radius);
 
 private:
     TexturedModel *chunks[SIZE_MAP][SIZE_MAP];
