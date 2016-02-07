@@ -121,7 +121,7 @@ QList<TexturedModel*> ChunkManager::getChunksNearby(float modelx, float modely, 
 
 void ChunkManager::createChunk(int x, int y)
 {
-    chunks[x][y] = new TexturedModel(Terrain::generateTerrain(), "terrain/gravel.dds");
+    chunks[x][y] = new TexturedModel(Terrain::generateTerrain(), "terrain/gravel");
     chunks[x][y]->MoveModel(x*Terrain::size, y*Terrain::size);
 }
 

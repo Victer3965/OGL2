@@ -9,6 +9,9 @@
         <file>res/terrain/gravel.dds</file>
         <file>res/Shaders/solidcolor.frag</file>
         <file>res/box/box.obj</file>
-        <file>res/box/grass.dds</file>
+        <file>res/errorTexture.jpg</file>
+        <file>res/box/box.dds</file>
+        <file>res/BigOldHouse/Big_Old_House.jpg</file>
+        <file>res/BigOldHouse/Big_Old_House.obj</file>
     </qresource>
 </RCC>

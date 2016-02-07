@@ -1,8 +1,8 @@
 #include "ModelBase.h"
 
-TexturedModel *ModelBase::loadModel(QString modelName, QString textureName, QVector3D pos, QVector3D rot)
+TexturedModel* ModelBase::loadModel(QString name, QVector3D pos, QVector3D rot, QString expandedName)
 {
-    TexturedModel* model = new TexturedModel(getRawModel(modelName), textureName);
+    TexturedModel* model = new TexturedModel(getRawModel(name), name+expandedName);
     model->RotateModel(rot.x(), rot.y(), rot.z());
     model->MoveModel(pos.x(), pos.y(), pos.z());
     models.append(model);
@@ -10,7 +10,7 @@ TexturedModel *ModelBase::loadModel(QString modelName, QString textureName, QVec
     return model;
 }
 
-RawModel *ModelBase::getRawModel(QString name)
+RawModel* ModelBase::getRawModel(QString name)
 {
     if (tableRawModels.contains(name))
         return tableRawModels.take(name);
@@ -21,11 +21,11 @@ RawModel *ModelBase::getRawModel(QString name)
 
 ModelBase::ModelBase()
 {
-    loadModel("t-54_wot/T-54", "t-54_wot/T-54.dds", QVector3D(0,0,0.55), QVector3D(0,0,180));
-    loadModel("t-54_wot/T-54", "t-54_wot/T-54_crash.dds", QVector3D(50,50,0.55), QVector3D(0,0,90));
-    loadModel("box/box", "box/grass.dds", QVector3D(45,25,0), QVector3D(0,0,45));
-    loadModel("box/box", "box/grass.dds", QVector3D(45,25,1), QVector3D(0,0,25));
-
+    loadModel("t-54_wot/T-54", QVector3D(0,0,0.55), QVector3D(0,0,180));
+    loadModel("t-54_wot/T-54", QVector3D(50,50,0.55), QVector3D(0,0,90), "_crash");
+    loadModel("box/box", QVector3D(45,25,0), QVector3D(0,0,45));
+    loadModel("box/box", QVector3D(45,25,1), QVector3D(0,0,25));
+    loadModel("BigOldHouse/Big_Old_House", QVector3D(50,25,0), QVector3D(90,0,0));
 
 }
 

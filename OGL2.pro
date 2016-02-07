@@ -22,7 +22,6 @@ SOURCES += main.cpp\
     Terrain.cpp \
     Shader.cpp \
     MainWindow.cpp \
-    CollisionModel.cpp \
     ModelBase.cpp
 
 HEADERS  += \
@@ -35,7 +34,6 @@ HEADERS  += \
     Terrain.h \
     Shader.h \
     MainWindow.h \
-    CollisionModel.h \
     ModelBase.h
 
 RESOURCES += \

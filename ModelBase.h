@@ -12,8 +12,8 @@ public:
     ModelBase();
     void paint(QOpenGLShaderProgram *shader, float radiusNearby);
     bool isColliding(TexturedModel *model);
-    TexturedModel *firstModel();
-    TexturedModel * loadModel(QString modelName, QString textureName, QVector3D pos, QVector3D rot);
+    TexturedModel* firstModel();
+    TexturedModel* loadModel(QString name, QVector3D rot, QVector3D pos, QString expandedName = "");
     RawModel* getRawModel(QString name);
 
 private:

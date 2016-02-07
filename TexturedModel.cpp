@@ -1,11 +1,27 @@
 #include "TexturedModel.h"
 #include "TexturesManager.h"
 
+#include <QFile>
+
 
 
 TexturedModel::TexturedModel(RawModel *model, QString nameTexture, bool createBoundingBox)
 {
-    textures = TexturesManager::getTexture(":/res/"+nameTexture);
+    if (QFile::exists(":/res/" + nameTexture + ".dds"))
+    {
+        textures = TexturesManager::getTexture(":/res/" + nameTexture + ".dds");
+    }
+    else if (QFile::exists(":/res/" + nameTexture + ".jpg"))
+    {
+        textures = TexturesManager::getTexture(":/res/" + nameTexture + ".jpg");
+    }
+    else if (QFile::exists(":/res/" + nameTexture + ".jpeg"))
+    {
+        textures = TexturesManager::getTexture(":/res/" + nameTexture + ".jpeg");
+    }
+    else textures = TexturesManager::getTexture(":/res/errorTexture.jpg");
+
+//    textures = TexturesManager::getTexture(":/res/"+nameTexture);
     pos.setX(0);
     pos.setY(0);
     pos.setZ(0);
