@@ -6,6 +6,7 @@
 #include <QVector3D>
 #include <QOpenGLBuffer>
 #include <QOpenGLShaderProgram>
+#include "coldet.h"
 
 class RawModel
 {
@@ -14,10 +15,12 @@ public:
 
     void PaintModel(QOpenGLShaderProgram *shader);
 
+    CollisionModel3D* calculateBoundingBox();
 private:
-    int vao;
     int vertexCount;
     QOpenGLBuffer vbo;
+    CollisionModel3D* boundingBox;
+    QVector<QVector3D> VertecesModel;
 };
 
 #endif // RAWMODEL_H

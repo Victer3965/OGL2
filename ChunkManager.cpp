@@ -16,10 +16,7 @@ TexturedModel *ChunkManager::getChunk(int x, int y)
     if (chunks[x][y] != 0)
         return chunks[x][y];
 
-//    for (int i = 0; i < coords.size(); i++)
-//    {
-//        chunkManager->createChunk(coords[i].x, coords[i].y);
-//    }
+
     if (allowChunksCreation)
     {
         chunksCreated++;
@@ -124,7 +121,7 @@ QList<TexturedModel*> ChunkManager::getChunksNearby(float modelx, float modely, 
 
 void ChunkManager::createChunk(int x, int y)
 {
-    chunks[x][y] = new TexturedModel(Terrain::generateTerrain(), ":/res/terrain/gravel.dds");
+    chunks[x][y] = new TexturedModel(Terrain::generateTerrain(), "terrain/gravel.dds");
     chunks[x][y]->MoveModel(x*Terrain::size, y*Terrain::size);
 }
 

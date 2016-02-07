@@ -3,8 +3,6 @@
 
 #include "RawModel.h"
 
-
-
 class Terrain
 {
 public:

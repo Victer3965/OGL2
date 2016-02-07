@@ -58,21 +58,12 @@ void MainWindow::initializeGL()
     initializeOpenGLFunctions();
     glClearColor(0.1, 0.1, 0.1, 1.0);
 
-    RawModel *modeltank = OBJLoader::Load("t-54_wot/T-54");
-
-    TexturedModel* tank = new TexturedModel(modeltank, ":/res/t-54_wot/T-54.dds");
-
-    player = new PhisicsTanks(tank);
-    models.append(tank);
-    models.append(new TexturedModel(modeltank, ":/res/t-54_wot/T-54_crash.dds"));
-    models.append(new TexturedModel(OBJLoader::Load("box/box"), ":/res/box/grass.dds"));
-
-    tank->RotateModel(0, 0, 180);
-    tank->MoveModel(0, 0, 0.55);
+    modelBase = new ModelBase();
+    player = new PhisicsTanks(modelBase->firstModel());
     camRotX = -45;
     camRotY = 0;
     camRotZ = 0;
-    calculateCamPos(distanceFromPlayer);
+    calculateCamPos();
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
 
@@ -96,20 +87,8 @@ void MainWindow::paintGL()
     shader->setUniformValue("projMatrix", m_proj);
     shader->setUniformValue("ViewMatrix", ViewMatrix);
 
-    chanksNerby = ChunkManager.getChunksNearby(models[0]->GetPos().x(),
-                                               models[0]->GetPos().y(),
-                                               radiusNearby);
+    modelBase->paint(shader, radiusNearby);
 
-    for (int i=0; i < chanksNerby.size(); i++)
-    {
-        chanksNerby[i]->PaintModel(shader);
-    }
-
-    for (int i=0; i < models.size()-1; i++){
-        models[i]->PaintModel(shader);
-    }
-
-//    models.last()->PaintModel(shader);
     shader->release();
 
     simpleShader->bind();
@@ -195,30 +174,34 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event)
 void MainWindow::updateScene()
 {
 
-    if (keyStates[KEY_FORWARD])
-    {
-        player->setAcceleration(0.1);
-    }
-    if (keyStates[KEY_BACKWARD])
-    {
-        player->setAcceleration(-0.1);
-    }
-
-    if (!keyStates[KEY_FORWARD] && !keyStates[KEY_BACKWARD])
+    if (keyStates[KEY_FORWARD] == keyStates[KEY_BACKWARD])
     {
         player->setAcceleration(0);
+    }else
+    if (keyStates[KEY_FORWARD])
+    {
+        player->setAcceleration(0.05);
+    }else
+    if (keyStates[KEY_BACKWARD])
+    {
+        player->setAcceleration(-0.05);
     }
 
+
+    if (keyStates[KEY_LEFT] == keyStates[KEY_RIGHT])
+    {
+        player->setRotation(0);
+    }else
     if (keyStates[KEY_LEFT])
     {
-        models[0]->RotateModel(0, 0, 1);
-        camRotZ-=1;
-    }
+        player->setRotation(1);
+    }else
     if (keyStates[KEY_RIGHT])
     {
-        models[0]->RotateModel(0, 0, -1);
-        camRotZ+=1;
+        player->setRotation(-1);
     }
+
+
     if (keyStates[KEY_CAM_FORWARD])
     {
         camPosX+=0.2*sin(camRotZ/180*M_PI);
@@ -255,29 +238,36 @@ void MainWindow::updateScene()
     {
         camRotX-=1;
     }
-    if (keyStates[KEY_CAM_CLOSER] /*&& camRotX>-90*/)
+    if (keyStates[KEY_CAM_CLOSER] && distanceFromPlayer > 5)
     {
         distanceFromPlayer-=0.5;
-//        camRotX+=1;
     }
-    if (keyStates[KEY_CAM_FARTHER] /*&& camRotX>-90*/)
+    if (keyStates[KEY_CAM_FARTHER] && distanceFromPlayer < 50)
     {
         distanceFromPlayer+=0.5;
-//        camRotX-=1;
     }
+
     player->move();
-    calculateCamPos(distanceFromPlayer);
+
+    if (modelBase->isColliding(player->Tank))
+    {
+        player->cancelMove();
+        player->stop();
+    }
+
+    calculateCamPos();
     update();
 }
 
-void MainWindow::calculateCamPos(float distance)
+void MainWindow::calculateCamPos()
 {
-    float horizDistnce = -distance*cos(camRotX/180*M_PI);
-    float vertDistance = -distance*sin(camRotX/180*M_PI);
+    camRotZ = -player->Tank->GetRot().z()+180;
+    float horizDistnce = -distanceFromPlayer*cos(camRotX/180*M_PI);
+    float vertDistance = -distanceFromPlayer*sin(camRotX/180*M_PI);
 
-    camPosX = models[0]->GetPos().x() + horizDistnce*sin(camRotZ/180*M_PI);
-    camPosY = models[0]->GetPos().y() + horizDistnce*cos(camRotZ/180*M_PI);
-    camPosZ = models[0]->GetPos().z() + vertDistance;
+    camPosX = player->getPos().x() + horizDistnce*sin(camRotZ/180*M_PI);
+    camPosY = player->getPos().y() + horizDistnce*cos(camRotZ/180*M_PI);
+    camPosZ = player->getPos().z() + vertDistance;
 }
 
 void MainWindow::startTimer()

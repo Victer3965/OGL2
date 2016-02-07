@@ -10,12 +10,23 @@ public:
 
     void setAcceleration(float accel);
 
+    void setRotation(float zRot);
+
     void move();
 
-private:
+    void stop();
+
+    void cancelMove();
+
     TexturedModel* Tank;
 
-    float acceleration, speed;
+    QVector3D getPos();
+
+private:
+    float zRot;
+    float acceleration, speed, rotSpeed;
+    float saveSpeed, saveRotSpeed;
+    QVector3D savePos;
 };
 
 #endif // PHISICSTANKS_H

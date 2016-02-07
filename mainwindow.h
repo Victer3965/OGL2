@@ -12,6 +12,7 @@
 #include "OBJLoader.h"
 #include "ChunkManager.h"
 #include "PhisicsTanks.h"
+#include "ModelBase.h"
 
 
 class MainWindow : public QOpenGLWidget, protected QOpenGLFunctions
@@ -47,11 +48,9 @@ private:
 
     QMatrix4x4 m_proj;
 
-    ChunkManager ChunkManager;
-
     PhisicsTanks* player;
 
-    QList<TexturedModel*> models, chanksNerby;
+    ModelBase* modelBase;
 
     QOpenGLShaderProgram *shader, *simpleShader;
 
@@ -59,7 +58,7 @@ private:
 
     QOpenGLShaderProgram* createShader(QString vshaderName, QString fshaderName);
 
-    void calculateCamPos(float distance);
+    void calculateCamPos();
 
     void startTimer();
 };

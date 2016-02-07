@@ -1,26 +1,36 @@
 #include "TexturedModel.h"
-#include "math.h"
 #include "TexturesManager.h"
 
 
 
-TexturedModel::TexturedModel(RawModel *model, QString nameTexture)
+TexturedModel::TexturedModel(RawModel *model, QString nameTexture, bool createBoundingBox)
 {
-    textures = TexturesManager::getTexture(nameTexture);
+    textures = TexturesManager::getTexture(":/res/"+nameTexture);
     pos.setX(0);
     pos.setY(0);
     pos.setZ(0);
+    xRot = 0;
+    yRot = 0;
+    zRot = 0;
     this->model=model;
+    if (createBoundingBox)
+    {
+        boundingBox = model->calculateBoundingBox();
+    }
+    else boundingBox = NULL;
 }
 
-void TexturedModel::PaintModel(QOpenGLShaderProgram *shader)
+void TexturedModel::calculateTransformationMatrix()
 {
-    QMatrix4x4 transformationMatrix;
     transformationMatrix.setToIdentity();
     transformationMatrix.translate(pos.x(), pos.y(), pos.z());
     transformationMatrix.rotate(xRot , 1.0f, 0.0f, 0.0f);
     transformationMatrix.rotate(yRot , 0.0f, 1.0f, 0.0f);
     transformationMatrix.rotate(zRot , 0.0f, 0.0f, 1.0f);
+}
+
+void TexturedModel::PaintModel(QOpenGLShaderProgram *shader)
+{
     shader->setUniformValue("modelMatrix",transformationMatrix);
     textures->bind();
     model->PaintModel(shader);
@@ -33,6 +43,9 @@ void TexturedModel::RotateModel(int xAngle, int yAngle, int zAngle)
     xRot += xAngle;
     yRot += yAngle;
     zRot += zAngle;
+    calculateTransformationMatrix();
+    if (boundingBox)
+        boundingBox->setTransform(transformationMatrix.data());
 }
 
 void TexturedModel::MoveModel(float dx, float dy, float dz)
@@ -40,6 +53,14 @@ void TexturedModel::MoveModel(float dx, float dy, float dz)
     pos.setX(pos.x()+dx);
     pos.setY(pos.y()+dy);
     pos.setZ(pos.z()+dz);
+    calculateTransformationMatrix();
+    if (boundingBox)
+        boundingBox->setTransform(transformationMatrix.data());
+}
+
+CollisionModel3D* TexturedModel::getBoundingBox()
+{
+    return boundingBox;
 }
 
 QVector3D TexturedModel::GetRot()
@@ -50,9 +71,4 @@ QVector3D TexturedModel::GetRot()
 QVector3D TexturedModel::GetPos()
 {
     return QVector3D(pos);
-}
-
-void TexturedModel::MoveForward(float distance)
-{
-    MoveModel(distance*sin(zRot/180*M_PI),-distance*cos(zRot/180*M_PI));
 }

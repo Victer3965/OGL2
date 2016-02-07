@@ -21,7 +21,9 @@ SOURCES += main.cpp\
     OBJLoader.cpp \
     Terrain.cpp \
     Shader.cpp \
-    MainWindow.cpp
+    MainWindow.cpp \
+    CollisionModel.cpp \
+    ModelBase.cpp
 
 HEADERS  += \
     TexturedModel.h \
@@ -32,9 +34,20 @@ HEADERS  += \
     OBJLoader.h \
     Terrain.h \
     Shader.h \
-    MainWindow.h
+    MainWindow.h \
+    CollisionModel.h \
+    ModelBase.h
 
 RESOURCES += \
     resources.qrc
 
 DISTFILES +=
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/lib/ -lCollisionModel
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/lib/ -lCollisionModeld
+
+INCLUDEPATH += $$PWD/lib
+DEPENDPATH += $$PWD/lib
+
+win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/lib/libCollisionModel.a
+else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/lib/libCollisionModeld.a

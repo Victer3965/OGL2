@@ -14,13 +14,13 @@
 class TexturedModel
 {
 public:
-    TexturedModel(RawModel* model, QString nameTexture);
+    TexturedModel(RawModel* model, QString nameTexture, bool createBoundingBox = true);
     void PaintModel(QOpenGLShaderProgram *shader);
     void RotateModel(int xAngle, int yAngle, int zAngle);
     void MoveModel (float dx, float dy, float dz = 0);
     QVector3D GetPos();
-    void MoveForward(float distance);
     QVector3D GetRot();
+    CollisionModel3D* getBoundingBox();
 private:
     float xRot;
     float yRot;
@@ -28,7 +28,10 @@ private:
     QOpenGLTexture *textures;
     QVector3D pos;
     RawModel* model;
+    QMatrix4x4 transformationMatrix;
+    CollisionModel3D* boundingBox;
 
+    void calculateTransformationMatrix();
 };
 
 #endif // TEXTUREDMODEL_H
