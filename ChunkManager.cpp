@@ -6,6 +6,9 @@
 ChunkManager::ChunkManager()
 {
     memset(chunks, 0, sizeof(chunks));
+    for (int x = 0; x < SIZE_MAP; x++)
+        for (int y = 0; y < SIZE_MAP; y++)
+            createChunk(x, y);
 }
 
 TexturedModel *ChunkManager::getChunk(int x, int y)
@@ -23,7 +26,6 @@ TexturedModel *ChunkManager::getChunk(int x, int y)
         createChunk(x, y);
         return chunks[x][y];
     }
-//    addCoords(x, y);
     return 0;
 }
 
@@ -99,7 +101,6 @@ QList<TexturedModel*> ChunkManager::getChunksNearby(float modelx, float modely, 
 
         }
 
-
         if (chunksCreated > 5)
             allowChunksCreation = false;
 
@@ -121,7 +122,7 @@ QList<TexturedModel*> ChunkManager::getChunksNearby(float modelx, float modely, 
 
 void ChunkManager::createChunk(int x, int y)
 {
-    chunks[x][y] = new TexturedModel(Terrain::generateTerrain(), "terrain/gravel");
+    chunks[x][y] = new TexturedModel(Terrain::generateTerrain(), "terrain/gravel", false);
     chunks[x][y]->MoveModel(x*Terrain::size, y*Terrain::size);
 }
 

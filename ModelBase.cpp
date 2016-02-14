@@ -1,10 +1,21 @@
 #include "ModelBase.h"
 
-TexturedModel* ModelBase::loadModel(QString name, QVector3D pos, QVector3D rot, QString expandedName)
+ModelBase::ModelBase()
+{
+    loadModel("t-54_wot/T-54", QVector3D(0,0,0.55), QVector3D(0,0,180));
+//    loadModel("t-54_wot/T-54", QVector3D(50,50,0.55), QVector3D(0,0,90), 2, "_crash");
+//    loadModel("box/box", QVector3D(45,25,0), QVector3D(0,0,45));
+//    loadModel("box/box", QVector3D(45,25,1), QVector3D(0,0,25));
+    loadModel("BigOldHouse/Big_Old_House", QVector3D(50,60,0), QVector3D(90,0,0), 2.5);
+}
+
+TexturedModel* ModelBase::loadModel(QString name, QVector3D pos, QVector3D rot, float scale, QString expandedName)
 {
     TexturedModel* model = new TexturedModel(getRawModel(name), name+expandedName);
+    model->Scale(scale);
     model->RotateModel(rot.x(), rot.y(), rot.z());
     model->MoveModel(pos.x(), pos.y(), pos.z());
+
     models.append(model);
 
     return model;
@@ -17,16 +28,6 @@ RawModel* ModelBase::getRawModel(QString name)
     RawModel* rawModel = OBJLoader::Load(name);
     tableRawModels.insert(name, rawModel);
     return rawModel;
-}
-
-ModelBase::ModelBase()
-{
-    loadModel("t-54_wot/T-54", QVector3D(0,0,0.55), QVector3D(0,0,180));
-    loadModel("t-54_wot/T-54", QVector3D(50,50,0.55), QVector3D(0,0,90), "_crash");
-    loadModel("box/box", QVector3D(45,25,0), QVector3D(0,0,45));
-    loadModel("box/box", QVector3D(45,25,1), QVector3D(0,0,25));
-    loadModel("BigOldHouse/Big_Old_House", QVector3D(50,25,0), QVector3D(90,0,0));
-
 }
 
 void ModelBase::paint(QOpenGLShaderProgram *shader, float radiusNearby)

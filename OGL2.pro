@@ -22,7 +22,11 @@ SOURCES += main.cpp\
     Terrain.cpp \
     Shader.cpp \
     MainWindow.cpp \
-    ModelBase.cpp
+    ModelBase.cpp \
+    Light.cpp \
+    BoundingBox.cpp \
+    tritri.c \
+    Config.cpp
 
 HEADERS  += \
     TexturedModel.h \
@@ -34,18 +38,21 @@ HEADERS  += \
     Terrain.h \
     Shader.h \
     MainWindow.h \
-    ModelBase.h
+    ModelBase.h \
+    Light.h \
+    BoundingBox.h \
+    Config.h
 
 RESOURCES += \
     resources.qrc
 
-DISTFILES +=
+#DISTFILES +=
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/lib/ -lCollisionModel
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/lib/ -lCollisionModeld
+#win32:CONFIG(release, debug|release): LIBS += -L$$PWD/lib/ -lCollisionModel
+#else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/lib/ -lCollisionModeld
 
-INCLUDEPATH += $$PWD/lib
-DEPENDPATH += $$PWD/lib
+#INCLUDEPATH += $$PWD/lib
+#DEPENDPATH += $$PWD/lib
 
-win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/lib/libCollisionModel.a
-else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/lib/libCollisionModeld.a
+#win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/lib/libCollisionModel.a
+#else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/lib/libCollisionModeld.a

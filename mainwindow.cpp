@@ -67,8 +67,7 @@ void MainWindow::initializeGL()
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
 
-    shader = Shader::createShader("vertexshader", "fragmentshader", this);
-    simpleShader = Shader::createShader("vertexshader", "solidcolor", this);
+    shader = new Shader("vertexshader", "fragmentshader", this);
 
 }
 
@@ -89,15 +88,13 @@ void MainWindow::paintGL()
 
     modelBase->paint(shader, radiusNearby);
 
-    shader->release();
-
-    simpleShader->bind();
-    simpleShader->setUniformValue("projMatrix", m_proj);
-    simpleShader->setUniformValue("ViewMatrix", ViewMatrix);
+    shader->setUniformValue("useTexture", false);
 
     QMatrix4x4 identityMatrix;
     identityMatrix.setToIdentity();
-    simpleShader->setUniformValue("modelMatrix",identityMatrix);
+
+    shader->setUniformValue("transformationMatrix",identityMatrix);
+
     glLineWidth(2.5);
     glColor3f(1.0, 0.5, 0.5);
     glBegin(GL_LINES);
@@ -116,7 +113,6 @@ void MainWindow::paintGL()
     glVertex3f(0.0, 0.0, -1.0);
     glVertex3f(0, 0, 15);
     glEnd();
-    simpleShader->release();
 }
 
 

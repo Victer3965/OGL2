@@ -20,18 +20,23 @@ public:
     void MoveModel (float dx, float dy, float dz = 0);
     QVector3D GetPos();
     QVector3D GetRot();
-    CollisionModel3D* getBoundingBox();
+
+    void Scale(float scale);
+    BoundingBox* getBoundingBox();
+    void drawBoundingBox(QOpenGLShaderProgram *shader);
 private:
     float xRot;
     float yRot;
     float zRot;
-    QOpenGLTexture *textures;
+    float scale;
     QVector3D pos;
+    QOpenGLTexture *textures;
     RawModel* model;
     QMatrix4x4 transformationMatrix;
-    CollisionModel3D* boundingBox;
+    BoundingBox *boundingBox;
 
     void calculateTransformationMatrix();
+//    void drawBoundingBox(QOpenGLShaderProgram *shader);
 };
 
 #endif // TEXTUREDMODEL_H

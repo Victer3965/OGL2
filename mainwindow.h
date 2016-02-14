@@ -52,7 +52,7 @@ private:
 
     ModelBase* modelBase;
 
-    QOpenGLShaderProgram *shader, *simpleShader;
+    QOpenGLShaderProgram *shader;
 
     void updateScene();
 

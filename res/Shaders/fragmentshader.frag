@@ -1,6 +1,13 @@
+varying mediump vec2 texc;
+
 uniform sampler2D texture;
-varying mediump vec4 texc;
+uniform vec3 lightColour;
+uniform bool useTexture;
+
 void main(void)
 {
-    gl_FragColor = texture2D(texture, texc.st);
+    if (useTexture)
+        gl_FragColor = texture2D(texture, texc);
+    else
+        gl_FragColor = gl_Color;
 }

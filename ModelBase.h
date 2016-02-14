@@ -13,7 +13,7 @@ public:
     void paint(QOpenGLShaderProgram *shader, float radiusNearby);
     bool isColliding(TexturedModel *model);
     TexturedModel* firstModel();
-    TexturedModel* loadModel(QString name, QVector3D rot, QVector3D pos, QString expandedName = "");
+    TexturedModel* loadModel(QString name, QVector3D rot, QVector3D pos, float scale = 1, QString expandedName = "");
     RawModel* getRawModel(QString name);
 
 private:
